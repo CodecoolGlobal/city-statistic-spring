@@ -1,6 +1,6 @@
 package com.codecool.citystatistics.controller;
 
-import com.codecool.citystatistics.resource.CityStatisticsResource;
+import com.codecool.citystatistics.model.ApiCall;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,11 +13,11 @@ import java.io.IOException;
 public class CityController {
 
     @Autowired
-    CityStatisticsResource cityStatisticsResource;
+    ApiCall cityStatisticsResource;
 
     @GetMapping("/")
     public void result() throws IOException, JSONException {
         JSONObject result = cityStatisticsResource.getResult();
-        System.out.println("This is: " + result.get("name"));
+        System.out.println("This is " + result.get("name"));
     }
 }

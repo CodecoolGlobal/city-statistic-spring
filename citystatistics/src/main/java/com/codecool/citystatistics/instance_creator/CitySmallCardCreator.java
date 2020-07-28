@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class CitySmallCardCreator {
-    CitySmallCard createCitySmallCard(){
+    public CitySmallCard createCitySmallCard(){
         return new CitySmallCard();
     }
 }

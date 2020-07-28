@@ -19,6 +19,10 @@ target/
 *.iml
 *.ipr
 
+### Floobits ###
+.floo
+.flooignore
+
 ### NetBeans ###
 /nbproject/private/
 /nbbuild/

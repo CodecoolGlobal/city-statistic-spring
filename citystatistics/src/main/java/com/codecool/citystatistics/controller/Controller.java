@@ -27,7 +27,22 @@ public class Controller {
     @Autowired
     CityScoresCreator cityScores;
 
+
     @GetMapping("/")
+    @CrossOrigin(origins = {"http://localhost:3000", "http://localhost:3001"})
+    public void defaultData(){
+        List<String> defaultCities = Arrays.asList("budapest", "barcelona", "melbourne");
+        String searchCityURL = "https://api.teleport.org/api/cities/?search=";
+        for (String defaultCity : defaultCities){
+
+        }
+    }
+
+
+
+
+
+    @GetMapping("/search")
     @CrossOrigin(origins = {"http://localhost:3000", "http://localhost:3001"})
     public ArrayList<CityScores> result() throws IOException, JSONException {
         ArrayList<CityScores> listOfCitiesByScores = new ArrayList<>();

@@ -16,10 +16,10 @@ import java.util.ArrayList;
 
 
 @RestController
-public class CityController {
+public class Controller {
 
     @Autowired
-    ApiCall cityStatisticsResource;
+    ApiCall apiCall;
 
     @Autowired
     CityScoresCreator cityScores;
@@ -28,7 +28,7 @@ public class CityController {
     public CityScores result() throws IOException, JSONException {
         ArrayList<Score> scoreArrayList = new ArrayList<>();
         CityScores cityResult = cityScores.createCityScores();
-        JSONObject result = cityStatisticsResource.getResult("https://api.teleport.org/api/urban_areas/slug:budapest/scores/");
+        JSONObject result = apiCall.getResult("https://api.teleport.org/api/urban_areas/slug:budapest/scores/");
 
         JSONArray categories = (JSONArray) result.get("categories");
         for (int i = 0; i < categories.length(); i++) {

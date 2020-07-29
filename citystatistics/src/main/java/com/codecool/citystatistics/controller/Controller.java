@@ -62,6 +62,51 @@ public class Controller {
     }
 
 
+
+    @GetMapping("/cityalldata/{cityslug}")
+    @CrossOrigin(origins = {"http://localhost:3000", "http://localhost:3001"})
+    public CityAllData result(@PathVariable String cityslug) throws IOException, JSONException {
+        String URL = "https://api.teleport.org/api/urban_areas/slug:"+cityslug;
+        ArrayList<Score> scoreArrayList = new ArrayList<>();
+        ArrayList<Salary> salaryArrayList = new ArrayList<>();
+        CityAllData cityAllData = cityAllDataCreator.createCityAllData();
+
+        cityAllData.setCitySlug(cityslug);
+
+        JSONObject resultName = apiCall.getResult(URL  + "/");
+        cityAllData.setCityName(resultName.getString("name"));
+
+        JSONObject resultScores = apiCall.getResult(URL  + "/scores/");
+        JSONArray categories = (JSONArray) resultScores.get("categories");
+        for (int i = 0; i < categories.length(); i++) {
+            Score score = scoreCreator.createScore();
+            score.setName(categories.getJSONObject(i).getString("name"));
+            score.setScore(categories.getJSONObject(i).getInt("score_out_of_10"));
+            scoreArrayList.add(score);
+        }
+        cityAllData.setScores(scoreArrayList);
+
+        JSONObject resultSalaries = apiCall.getResult(URL  + "/salaries/");
+        JSONArray salaries = (JSONArray) resultSalaries.get("salaries");
+        for (int i = 0; i < salaries.length(); i++) {
+            Salary salary = salaryCreator.createSalary();
+            salary.setTitle(salaries.getJSONObject(i).getJSONObject("job").getString("title"));
+            salary.setPercentile_25(salaries.getJSONObject(i).getJSONObject("salary_percentiles").getInt("percentile_25"));
+            salary.setPercentile_50(salaries.getJSONObject(i).getJSONObject("salary_percentiles").getInt("percentile_50"));
+            salary.setPercentile_75(salaries.getJSONObject(i).getJSONObject("salary_percentiles").getInt("percentile_75"));
+            salaryArrayList.add(salary);
+        }
+        cityAllData.setSalaries(salaryArrayList);
+
+        JSONObject resultImage = apiCall.getResult(URL + "/images/");
+        String imageURL = resultImage.getJSONArray("photos").getJSONObject(0).getJSONObject("image").getString("web");
+        cityAllData.setImage(imageURL);
+
+        return cityAllData;
+    }
+}
+
+/*
     @GetMapping("/")
     @CrossOrigin(origins = {"http://localhost:3000", "http://localhost:3001"})
     public ArrayList<CitySmallCard> defaultData() throws IOException, JSONException {
@@ -106,46 +151,4 @@ public class Controller {
 
         return listOfCitiesByScores;
     }
-
-    @GetMapping("/cityalldata/{cityslug}")
-    @CrossOrigin(origins = {"http://localhost:3000", "http://localhost:3001"})
-    public CityAllData result(@PathVariable String cityslug) throws IOException, JSONException {
-        String URL = "https://api.teleport.org/api/urban_areas/slug:"+cityslug;
-        ArrayList<Score> scoreArrayList = new ArrayList<>();
-        ArrayList<Salary> salaryArrayList = new ArrayList<>();
-        CityAllData cityAllData = cityAllDataCreator.createCityAllData();
-
-        cityAllData.setCitySlug(cityslug);
-
-        JSONObject resultName = apiCall.getResult(URL  + "/");
-        cityAllData.setCityName(resultName.getString("name"));
-
-        JSONObject resultScores = apiCall.getResult(URL  + "/scores/");
-        JSONArray categories = (JSONArray) resultScores.get("categories");
-        for (int i = 0; i < categories.length(); i++) {
-            Score score = scoreCreator.createScore();
-            score.setName(categories.getJSONObject(i).getString("name"));
-            score.setScore(categories.getJSONObject(i).getInt("score_out_of_10"));
-            scoreArrayList.add(score);
-        }
-        cityAllData.setScores(scoreArrayList);
-
-        JSONObject resultSalaries = apiCall.getResult(URL  + "/salaries/");
-        JSONArray salaries = (JSONArray) resultSalaries.get("salaries");
-        for (int i = 0; i < salaries.length(); i++) {
-            Salary salary = salaryCreator.createSalary();
-            salary.setTitle(salaries.getJSONObject(i).getJSONObject("job").getString("title"));
-            salary.setPercentile_25(salaries.getJSONObject(i).getJSONObject("salary_percentiles").getInt("percentile_25"));
-            salary.setPercentile_50(salaries.getJSONObject(i).getJSONObject("salary_percentiles").getInt("percentile_50"));
-            salary.setPercentile_75(salaries.getJSONObject(i).getJSONObject("salary_percentiles").getInt("percentile_75"));
-            salaryArrayList.add(salary);
-        }
-        cityAllData.setSalaries(salaryArrayList);
-
-        JSONObject resultImage = apiCall.getResult(URL + "/images/");
-        String imageURL = resultImage.getJSONArray("photos").getJSONObject(0).getJSONObject("image").getString("web");
-        cityAllData.setImage(imageURL);
-
-        return cityAllData;
-    }
-}
+ */

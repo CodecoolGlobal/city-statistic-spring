@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 public class CityScores {
     public String cityName;
+    public ArrayList<Score> scores;
 
     public void setCityName(String cityName) {
         this.cityName = cityName;
@@ -13,5 +14,5 @@ public class CityScores {
         this.scores = scores;
     }
 
-    public ArrayList<Score> scores;
+
 }

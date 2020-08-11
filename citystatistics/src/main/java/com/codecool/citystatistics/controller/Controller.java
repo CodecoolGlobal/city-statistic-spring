@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 
 
 @RestController
@@ -161,5 +160,11 @@ public class Controller {
         } catch ( DataIntegrityViolationException e){
             System.out.println("Error: " + e);
         }
+    }
+
+    @GetMapping("/get-all-favourite-cities")
+    @CrossOrigin(origins = {"http://localhost:3000", "http://localhost:3001"})
+    public ArrayList<String> getAllFavouriteCitySlugs(){
+        return favouriteCityRepository.getAllFavouriteSlug();
     }
 }

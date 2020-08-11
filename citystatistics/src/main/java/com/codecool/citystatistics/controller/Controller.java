@@ -134,4 +134,17 @@ public class Controller {
             System.out.println("Error: " + e);
         }
     }
+
+    @GetMapping("/delete-favourite-city/{citySlug}")
+    @CrossOrigin(origins = {"http://localhost:3000", "http://localhost:3001"})
+    public void deleteFavouriteCity(@PathVariable String citySlug) {
+
+        try {
+            if(PreDefinedSlugSet.preDefinedSlugSet.contains(citySlug)){
+                favouriteCityRepository.deleteFavouriteCityBySlug(citySlug);
+            }
+        } catch ( DataIntegrityViolationException e){
+            System.out.println("Error: " + e);
+        }
+    }
 }

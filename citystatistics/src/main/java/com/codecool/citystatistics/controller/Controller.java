@@ -59,13 +59,13 @@ public class Controller {
         String URL = "https://api.teleport.org/api/urban_areas/slug:"+cityslug;
         ArrayList<Score> scoreArrayList = new ArrayList<>();
         ArrayList<Salary> salaryArrayList = new ArrayList<>();
-//        CityAllData cityAllData = cityAllDataCreator.createCityAllData();
 
-//        cityAllData.setCitySlug(cityslug);
+
+
 
         JSONObject resultName = apiCall.getResult(URL  + "/");
         String name = resultName.getString("name");
-        //cityAllData.setCityName(resultName.getString("name"));
+
 
         JSONObject resultScores = apiCall.getResult(URL  + "/scores/");
         JSONArray categories = (JSONArray) resultScores.get("categories");
@@ -79,7 +79,7 @@ public class Controller {
                     .build();
             scoreArrayList.add(score);
         }
-//        cityAllData.setScores(scoreArrayList);
+
 
         JSONObject resultSalaries = apiCall.getResult(URL  + "/salaries/");
         JSONArray salaries = (JSONArray) resultSalaries.get("salaries");
@@ -97,11 +97,10 @@ public class Controller {
                     .build();
             salaryArrayList.add(salary);
         }
-        //cityAllData.setSalaries(salaryArrayList);
 
         JSONObject resultImage = apiCall.getResult(URL + "/images/");
         String imageURL = resultImage.getJSONArray("photos").getJSONObject(0).getJSONObject("image").getString("web");
-//        cityAllData.setImage(imageURL);
+
 
         return CityAllData
                 .builder()

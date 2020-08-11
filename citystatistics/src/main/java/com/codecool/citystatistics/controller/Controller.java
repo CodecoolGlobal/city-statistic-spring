@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 
 @RestController
@@ -68,9 +69,7 @@ public class Controller {
         String URL = "https://api.teleport.org/api/urban_areas/slug:"+cityslug;
         ArrayList<Score> scoreArrayList = new ArrayList<>();
         ArrayList<Salary> salaryArrayList = new ArrayList<>();
-        System.out.println(commentRepository.getAllCommentsBySlug());
-
-
+        ArrayList<String> comments = commentRepository.getAllCommentsBySlug(cityslug);
 
 
         JSONObject resultName = apiCall.getResult(URL  + "/");
@@ -119,6 +118,7 @@ public class Controller {
                 .scores(scoreArrayList)
                 .salaries(salaryArrayList)
                 .image(imageURL)
+                .comments(comments)
                 .build();
     }
 

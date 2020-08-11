@@ -1,18 +1,17 @@
 package com.codecool.citystatistics.controller;
 
+import com.codecool.citystatistics.entity.Comment;
 import com.codecool.citystatistics.entity.FavouriteCity;
 import com.codecool.citystatistics.init.PreDefinedSlugSet;
 import com.codecool.citystatistics.model.*;
+import com.codecool.citystatistics.repository.CommentRepository;
 import com.codecool.citystatistics.repository.FavouriteCityRepository;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.sql.SQLIntegrityConstraintViolationException;
@@ -29,6 +28,9 @@ public class Controller {
 
     @Autowired
     FavouriteCityRepository favouriteCityRepository;
+
+    @Autowired
+    CommentRepository commentRepository;
 
 
     @GetMapping("/continent/{continent}")
@@ -142,6 +144,21 @@ public class Controller {
         try {
             if(PreDefinedSlugSet.preDefinedSlugSet.contains(citySlug)){
                 favouriteCityRepository.deleteFavouriteCityBySlug(citySlug);
+            }
+        } catch ( DataIntegrityViolationException e){
+            System.out.println("Error: " + e);
+        }
+    }
+
+    @PostMapping("/add-comment/{citySlug}")
+    @CrossOrigin(origins = {"http://localhost:3000", "http://localhost:3001"})
+    public void addComment(@PathVariable String citySlug, @RequestBody String comment) throws JSONException {
+        JSONObject receivedComment = new JSONObject(comment);
+        System.out.println(receivedComment.getString("comment"));
+        System.out.println("query comment: " + comment);
+        try {
+            if(PreDefinedSlugSet.preDefinedSlugSet.contains(citySlug)){
+                commentRepository.save(Comment.builder().slug(citySlug).comment(receivedComment.getString("comment")).build());
             }
         } catch ( DataIntegrityViolationException e){
             System.out.println("Error: " + e);

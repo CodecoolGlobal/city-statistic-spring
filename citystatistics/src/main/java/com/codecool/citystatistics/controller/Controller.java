@@ -68,7 +68,7 @@ public class Controller {
         String URL = "https://api.teleport.org/api/urban_areas/slug:"+cityslug;
         ArrayList<Score> scoreArrayList = new ArrayList<>();
         ArrayList<Salary> salaryArrayList = new ArrayList<>();
-        //System.out.println(commentRepository.getAllCommentsBySlug(cityslug));
+        System.out.println(commentRepository.getAllCommentsBySlug());
 
 
 

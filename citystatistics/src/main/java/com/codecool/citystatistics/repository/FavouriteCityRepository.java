@@ -14,4 +14,5 @@ public interface FavouriteCityRepository extends JpaRepository<FavouriteCity, Lo
 
     @Query("SELECT slug FROM FavouriteCity")
     ArrayList<String> getAllFavouriteSlug();
+
 }

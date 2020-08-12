@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 
 @RestController
@@ -37,7 +38,9 @@ public class Controller {
         String searchContinentURL = "https://api.teleport.org/api/continents/geonames%3A"+continent+"/urban_areas/";
         JSONObject resultSlugs = apiCall.getResult(searchContinentURL);
         JSONArray slugs = resultSlugs.getJSONObject("_links").getJSONArray("ua:items");
-        
+
+        List<String> favouriteCitySlugs = favouriteCityRepository.getAllFavouriteSlug();
+
         for (int i = 0; i < slugs.length(); i++){
 
             JSONObject citySlug = slugs.getJSONObject(i);
@@ -46,12 +49,18 @@ public class Controller {
             
             JSONObject resultImage = apiCall.getResult(citySlug.getString("href").replaceAll("\\\\", "")+"images");
             String imageURL = resultImage.getJSONArray("photos").getJSONObject(0).getJSONObject("image").getString("web");
-            
+
+            boolean isFavourite = favouriteCitySlugs.contains(slug);
+
+
+
+
             CitySmallCard cityCard = CitySmallCard
                     .builder()
                     .cityName(name)
                     .citySlug(slug)
                     .cityImage(imageURL)
+                    .isFavourite(isFavourite)
                     .build();
 
             citySmallCards.add(cityCard);
@@ -121,7 +130,7 @@ public class Controller {
                 .build();
     }
 
-    @GetMapping("/add-favourite-city/{citySlug}")
+    @PostMapping("/add-favourite-city/{citySlug}")
     @CrossOrigin(origins = {"http://localhost:3000", "http://localhost:3001"})
     public void addFavouriteCity(@PathVariable String citySlug) {
 
@@ -134,7 +143,7 @@ public class Controller {
         }
     }
 
-    @GetMapping("/delete-favourite-city/{citySlug}")
+    @PostMapping("/delete-favourite-city/{citySlug}")
     @CrossOrigin(origins = {"http://localhost:3000", "http://localhost:3001"})
     public void deleteFavouriteCity(@PathVariable String citySlug) {
 

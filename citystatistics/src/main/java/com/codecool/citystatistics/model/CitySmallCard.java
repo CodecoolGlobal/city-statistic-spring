@@ -16,6 +16,7 @@ public class CitySmallCard {
     public String cityName;
     public String cityImage;
     public String citySlug;
+    public boolean isFavourite;
 
 
 }

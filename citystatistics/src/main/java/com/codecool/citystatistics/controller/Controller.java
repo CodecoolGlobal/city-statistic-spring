@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Map;
 
 
 @RestController
@@ -149,13 +150,13 @@ public class Controller {
 
     @PostMapping("/add-comment/{citySlug}")
     @CrossOrigin(origins = {"http://localhost:3000", "http://localhost:3001"})
-    public void addComment(@PathVariable String citySlug, @RequestBody String comment) throws JSONException {
-        JSONObject receivedComment = new JSONObject(comment);
-        System.out.println(receivedComment.getString("comment"));
+    public void addComment(@PathVariable String citySlug, @RequestBody Map<String, String> comment) throws JSONException {
+        //JSONObject receivedComment = new JSONObject(comment);
+        //System.out.println(receivedComment.getString("comment"));
         System.out.println("query comment: " + comment);
         try {
             if(PreDefinedSlugSet.preDefinedSlugSet.contains(citySlug)){
-                commentRepository.save(Comment.builder().slug(citySlug).comment(receivedComment.getString("comment")).build());
+                commentRepository.save(Comment.builder().slug(citySlug).comment(comment.get("comment")).build());
             }
         } catch ( DataIntegrityViolationException e){
             System.out.println("Error: " + e);

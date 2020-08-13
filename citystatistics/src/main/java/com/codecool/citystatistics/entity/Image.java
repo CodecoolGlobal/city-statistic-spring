@@ -22,7 +22,7 @@ public class Image {
     @GeneratedValue
     private Long id;
 
-    @Column(unique = true, nullable = false)
+    @Column(nullable = false)
     private String slug;
 
     @Column(nullable = false, columnDefinition = "LONGVARCHAR")

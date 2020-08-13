@@ -73,7 +73,7 @@ public class Controller {
     }
 
 
-    @GetMapping("/cityalldata/{cityslug}")
+    @GetMapping("/cityalldata/{citySlug}")
     @CrossOrigin(origins = {"http://localhost:3000", "http://localhost:3001"})
     public CityAllData result(@PathVariable String citySlug) throws IOException, JSONException {
         String URL = "https://api.teleport.org/api/urban_areas/slug:" + citySlug;

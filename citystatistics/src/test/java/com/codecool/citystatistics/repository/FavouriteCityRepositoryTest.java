@@ -76,4 +76,22 @@ class FavouriteCityRepositoryTest {
         assertThat(favouriteCityRepository.getAllFavouriteSlug()).hasSize(2).containsOnlyOnce("budapest", "london");
 
     }
+
+    @Test
+    public void deleteFavouriteSlug(){
+        FavouriteCity favouriteCity1 = FavouriteCity
+                .builder()
+                .slug("budapest")
+                .build();
+
+        FavouriteCity favouriteCity2 = FavouriteCity
+                .builder()
+                .slug("london")
+                .build();
+
+        favouriteCityRepository.saveAll(Lists.newArrayList(favouriteCity1, favouriteCity2));
+        favouriteCityRepository.deleteFavouriteCityBySlug("budapest");
+        assertThat(favouriteCityRepository.getAllFavouriteSlug()).hasSize(1).contains("london");
+
+    }
 }

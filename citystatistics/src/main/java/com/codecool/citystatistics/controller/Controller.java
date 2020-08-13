@@ -205,14 +205,15 @@ public class Controller {
     @PostMapping("/saveimage/{citySlug}")
     @CrossOrigin(origins = {"http://localhost:3000", "http://localhost:3001"})
     public void saveImage(@PathVariable String citySlug, @RequestBody String base64) throws IOException, JSONException {
-        Image image = Image.builder()
-                .slug(citySlug)
-                .base64(base64)
-                .build();
-
-        imageRepository.save(image);
-
-    }
+        JSONObject imageBase64 = new JSONObject(base64);
+        try {
+            if (PreDefinedSlugSet.preDefinedSlugSet.contains(citySlug)) {
+                imageRepository.save(Image.builder().slug(citySlug).base64(base64).build());
+            }
+        } catch (DataIntegrityViolationException e) {
+            System.out.println("Error: " + e);
+        }
+     }
 
     @GetMapping("/getimage/{citySlug}")
     @CrossOrigin(origins = {"http://localhost:3000", "http://localhost:3001"})

@@ -208,7 +208,7 @@ public class Controller {
         JSONObject imageBase64 = new JSONObject(base64);
         try {
             if (PreDefinedSlugSet.preDefinedSlugSet.contains(citySlug)) {
-                imageRepository.save(Image.builder().slug(citySlug).base64(base64).build());
+                imageRepository.save(Image.builder().slug(citySlug).base64(imageBase64.getString("base64")).build());
             }
         } catch (DataIntegrityViolationException e) {
             System.out.println("Error: " + e);

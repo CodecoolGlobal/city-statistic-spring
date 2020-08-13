@@ -18,5 +18,6 @@ public class CityAllData {
     public ArrayList<Score> scores;
     public ArrayList<Salary> salaries;
     public ArrayList<String> comments;
+    public ArrayList<String> images;
 
 }

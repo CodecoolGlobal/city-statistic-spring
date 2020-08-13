@@ -75,11 +75,12 @@ public class Controller {
 
     @GetMapping("/cityalldata/{cityslug}")
     @CrossOrigin(origins = {"http://localhost:3000", "http://localhost:3001"})
-    public CityAllData result(@PathVariable String cityslug) throws IOException, JSONException {
-        String URL = "https://api.teleport.org/api/urban_areas/slug:" + cityslug;
+    public CityAllData result(@PathVariable String citySlug) throws IOException, JSONException {
+        String URL = "https://api.teleport.org/api/urban_areas/slug:" + citySlug;
         ArrayList<Score> scoreArrayList = new ArrayList<>();
         ArrayList<Salary> salaryArrayList = new ArrayList<>();
-        ArrayList<String> comments = commentRepository.getAllCommentsBySlug(cityslug);
+        ArrayList<String> comments = commentRepository.getAllCommentsBySlug(citySlug);
+        ArrayList<String> cityImages = imageRepository.getAllBase64BySlug(citySlug);
 
 
         JSONObject resultName = apiCall.getResult(URL + "/");
@@ -121,14 +122,17 @@ public class Controller {
         String imageURL = resultImage.getJSONArray("photos").getJSONObject(0).getJSONObject("image").getString("web");
 
 
+
+
         return CityAllData
                 .builder()
                 .cityName(name)
-                .citySlug(cityslug)
+                .citySlug(citySlug)
                 .scores(scoreArrayList)
                 .salaries(salaryArrayList)
                 .image(imageURL)
                 .comments(comments)
+                .images(cityImages)
                 .build();
     }
 
@@ -214,18 +218,4 @@ public class Controller {
             System.out.println("Error: " + e);
         }
      }
-
-    @GetMapping("/getimage/{citySlug}")
-    @CrossOrigin(origins = {"http://localhost:3000", "http://localhost:3001"})
-    public ArrayList<String> saveImage(@PathVariable String citySlug) throws IOException, JSONException {
-        ArrayList<String> cityImages = imageRepository.getAllBase64BySlug(citySlug);
-
-        return cityImages;
-    }
-
-
-
-
-
-
 }

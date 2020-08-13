@@ -214,6 +214,16 @@ public class Controller {
 
     }
 
+    @GetMapping("/getimage/{citySlug}")
+    @CrossOrigin(origins = {"http://localhost:3000", "http://localhost:3001"})
+    public ArrayList<String> saveImage(@PathVariable String citySlug) throws IOException, JSONException {
+        ArrayList<String> cityImages = imageRepository.getAllBase64BySlug(citySlug);
+
+        return cityImages;
+    }
+
+
+
 
 
 

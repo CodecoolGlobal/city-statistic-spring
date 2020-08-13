@@ -2,10 +2,12 @@ package com.codecool.citystatistics.controller;
 
 import com.codecool.citystatistics.entity.Comment;
 import com.codecool.citystatistics.entity.FavouriteCity;
+import com.codecool.citystatistics.entity.Image;
 import com.codecool.citystatistics.init.PreDefinedSlugSet;
 import com.codecool.citystatistics.model.*;
 import com.codecool.citystatistics.repository.CommentRepository;
 import com.codecool.citystatistics.repository.FavouriteCityRepository;
+import com.codecool.citystatistics.repository.ImageRepository;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -29,6 +31,9 @@ public class Controller {
 
     @Autowired
     CommentRepository commentRepository;
+
+    @Autowired
+    ImageRepository imageRepository;
 
 
     @GetMapping("/continent/{continent}")
@@ -194,6 +199,19 @@ public class Controller {
             citySmallCards.add(cityCard);
         }
         return citySmallCards;
+    }
+
+
+    @PostMapping("/saveimage/{citySlug}")
+    @CrossOrigin(origins = {"http://localhost:3000", "http://localhost:3001"})
+    public void saveImage(@PathVariable String citySlug, @RequestBody String base64) throws IOException, JSONException {
+        Image image = Image.builder()
+                .slug(citySlug)
+                .base64(base64)
+                .build();
+
+        imageRepository.save(image);
+
     }
 
 

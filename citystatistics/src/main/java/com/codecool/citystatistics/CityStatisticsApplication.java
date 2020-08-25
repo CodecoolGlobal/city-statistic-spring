@@ -16,18 +16,9 @@ import java.util.Arrays;
 
 @SpringBootApplication
 public class CityStatisticsApplication {
-    @Autowired
-    AppUserRepository appUserRepository;
 
     public static void main(String[] args) {
         SpringApplication.run(CityStatisticsApplication.class, args);
     }
 
-    @Bean
-    @Profile("production")
-    public CommandLineRunner init(){
-        return args -> {
-            appUserRepository.delete(appUserRepository.findAll().get(1));
-        };
-    }
 }

@@ -1,8 +1,11 @@
 package com.codecool.citystatistics.controller;
 
+import com.codecool.citystatistics.entity.AppUser;
+import com.codecool.citystatistics.model.RegistrationCredentials;
 import com.codecool.citystatistics.model.UserCredentials;
 import com.codecool.citystatistics.repository.AppUserRepository;
 import com.codecool.citystatistics.security.JwtTokenServices;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -12,6 +15,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,9 +30,34 @@ public class AuthController {
 
     private final JwtTokenServices jwtTokenServices;
 
+    private final AppUserRepository userRepository;
+
     public AuthController(AuthenticationManager authenticationManager, JwtTokenServices jwtTokenServices, AppUserRepository users) {
         this.authenticationManager = authenticationManager;
         this.jwtTokenServices = jwtTokenServices;
+        this.userRepository = users;
+    }
+
+    @PostMapping("/registration")
+    public ResponseEntity register(@RequestBody RegistrationCredentials data){
+        try{
+            AppUser newUser = AppUser
+                    .builder()
+                    .username(data.getUsername())
+                    .password(data.getPassword())
+                    .email(data.getEmail())
+                    .roles(Arrays.asList("ROLE_USER"))
+                    .build();
+
+            if(data.getBirthDate() != null){newUser.setBirthDate(data.getBirthDate());}
+
+            userRepository.save(newUser);
+
+            return ResponseEntity.ok("New user (" + newUser.getUsername() + ") has been registered!" );
+        }
+        catch (DataIntegrityViolationException e){
+            return ResponseEntity.unprocessableEntity().body("Failed to register user!");
+        }
     }
 
     @PostMapping("/signin")

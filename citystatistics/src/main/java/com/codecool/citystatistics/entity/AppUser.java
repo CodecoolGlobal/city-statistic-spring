@@ -12,17 +12,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Data
-@Table
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 @Entity
 public class AppUser {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue
     private long id;
 
-    @Column(nullable = false)
+    @Column(unique = true, nullable = false)
     private String username;
 
     @Column(nullable = false)
@@ -32,7 +31,7 @@ public class AppUser {
     @Builder.Default
     private List<String> roles = new ArrayList<>();
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String email;
 
     private LocalDate birthDate;

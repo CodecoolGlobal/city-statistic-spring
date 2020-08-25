@@ -13,10 +13,13 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -43,7 +46,7 @@ public class AuthController {
     }
 
     @PostMapping("/registration")
-    public ResponseEntity register(@RequestBody RegistrationCredentials data){
+    public ResponseEntity<?> register(@RequestBody RegistrationCredentials data,  HttpServletResponse response){
         try{
             AppUser newUser = AppUser
                     .builder()
@@ -60,10 +63,19 @@ public class AuthController {
 
             userRepository.save(newUser);
 
-            return ResponseEntity.ok("New user (" + newUser.getUsername() + ") has been registered!" );
+            String token = jwtTokenServices.createToken(newUser.getUsername(), newUser.getRoles());
+            Map<Object, Object> model = new HashMap<>();
+            model.put("username", newUser.getUsername());
+            model.put("roles", newUser.getRoles());
+            model.put("status", "ok");
+            model.put("token", token);
+
+            return ResponseEntity.ok(model);
         }
         catch (DataIntegrityViolationException e){
-            return ResponseEntity.unprocessableEntity().body("Failed to register user!");
+            Map<Object, Object> model = new HashMap<>();
+            model.put("status", "failed");
+            return ResponseEntity.unprocessableEntity().body(model);
         }
     }
 
@@ -88,5 +100,9 @@ public class AuthController {
         } catch (AuthenticationException e) {
             throw new BadCredentialsException("Invalid username/password supplied");
         }
+    }
+    @GetMapping("/me")
+    public String currentUser(@CookieValue(value = "token") String token){
+        return token;
     }
 }

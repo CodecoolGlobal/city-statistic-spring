@@ -53,7 +53,10 @@ public class AuthController {
                     .roles(Arrays.asList("ROLE_USER"))
                     .build();
 
-            if(data.getBirthDate() != null){newUser.setBirthDate(data.getBirthDate());}
+            if(data.getBirthDate() != null){
+                newUser.setBirthDate(data.getBirthDate());
+                newUser.setAge(newUser.calculateAge());
+            }
 
             userRepository.save(newUser);
 

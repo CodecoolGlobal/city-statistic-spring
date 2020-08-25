@@ -13,6 +13,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
@@ -32,6 +34,8 @@ public class AuthController {
 
     private final AppUserRepository userRepository;
 
+    private final PasswordEncoder passwordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
+
     public AuthController(AuthenticationManager authenticationManager, JwtTokenServices jwtTokenServices, AppUserRepository users) {
         this.authenticationManager = authenticationManager;
         this.jwtTokenServices = jwtTokenServices;
@@ -44,7 +48,7 @@ public class AuthController {
             AppUser newUser = AppUser
                     .builder()
                     .username(data.getUsername())
-                    .password(data.getPassword())
+                    .password(passwordEncoder.encode(data.getPassword()))
                     .email(data.getEmail())
                     .roles(Arrays.asList("ROLE_USER"))
                     .build();

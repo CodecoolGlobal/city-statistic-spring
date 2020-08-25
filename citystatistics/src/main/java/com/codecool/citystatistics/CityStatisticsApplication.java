@@ -17,24 +17,8 @@ import java.util.Arrays;
 @SpringBootApplication
 public class CityStatisticsApplication {
 
-    @Autowired
-    AppUserRepository appUserRepository;
-
     public static void main(String[] args) {
         SpringApplication.run(CityStatisticsApplication.class, args);
-    }
-
-    @Bean
-    @Profile("production")
-    public CommandLineRunner init(){
-        return args -> {
-            AppUser user = AppUser.builder()
-                    .username("admin").birthDate(LocalDate.of(1999,8,8))
-                    .password("password").email("admin@gmail.com").roles(Arrays.asList("ROLE_ADMIN", "ROLE_USER"))
-                    .build();
-
-            appUserRepository.save(user);
-        };
     }
 
 }

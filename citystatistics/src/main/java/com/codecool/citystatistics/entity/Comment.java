@@ -6,10 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Data
 @NoArgsConstructor
@@ -26,4 +23,14 @@ public class Comment {
 
     @Column(nullable = false)
     private String slug;
+
+    @Column
+    //@Builder.Default
+    private Integer upVote = 0;
+
+    @Column
+    private Integer downVote;
+
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    private AppUser appuser;
 }

@@ -39,6 +39,12 @@ public class AppUser {
 
     private Long age = calculateAge();
 
+    @OneToMany(
+            cascade = CascadeType.PERSIST,
+            orphanRemoval = true
+    )
+    private List<Comment> comments = new ArrayList<>();
+
 
     public Long calculateAge(){
         if(birthDate != null){

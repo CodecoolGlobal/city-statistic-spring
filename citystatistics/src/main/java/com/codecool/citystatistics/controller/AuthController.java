@@ -102,7 +102,8 @@ public class AuthController {
         }
     }
     @GetMapping("/me")
-    public String currentUser(@CookieValue(value = "token") String token){
-        return token;
+    public String currentUser(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return authentication.getPrincipal() + "\n" + authentication.getAuthorities();
     }
 }

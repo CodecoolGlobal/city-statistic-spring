@@ -39,11 +39,9 @@ public class AppUser {
 
     private Long age = calculateAge();
 
-    @org.springframework.data.annotation.Transient
     @OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     private List<FavouriteCity> favouriteCities;
 
-    @org.springframework.data.annotation.Transient
     @OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     private List<Image> images;
 

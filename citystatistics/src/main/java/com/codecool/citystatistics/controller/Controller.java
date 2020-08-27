@@ -158,7 +158,7 @@ public class Controller {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         AppUser appUser = appUserRepository.getAppUserByUsername((String) authentication.getPrincipal());
-        System.out.println(appUser);
+
 
         try {
             if (PreDefinedSlugSet.preDefinedSlugSet.contains(citySlug)) {

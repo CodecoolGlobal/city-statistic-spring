@@ -13,9 +13,10 @@ import java.util.List;
 import java.util.Set;
 
 @Data
+@Table
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 @Entity
 public class AppUser {
     @Id
@@ -47,6 +48,12 @@ public class AppUser {
 
     @Column(columnDefinition = "LONGVARCHAR")
     private String profileImage;
+
+    @OneToMany(
+            cascade = CascadeType.PERSIST,
+            orphanRemoval = true
+    )
+    private List<Comment> comments = new ArrayList<>();
 
 
     public Long calculateAge(){

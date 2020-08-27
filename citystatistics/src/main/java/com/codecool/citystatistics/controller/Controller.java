@@ -18,6 +18,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -95,7 +96,7 @@ public class Controller {
         String URL = "https://api.teleport.org/api/urban_areas/slug:" + citySlug;
         ArrayList<Score> scoreArrayList = new ArrayList<>();
         ArrayList<Salary> salaryArrayList = new ArrayList<>();
-        ArrayList<String> comments = commentRepository.getAllCommentsBySlug(citySlug);
+        ArrayList<Comment> comments = commentRepository.getCommentsBySlug(citySlug);
         ArrayList<String> cityImages = imageRepository.getAllBase64BySlug(citySlug);
 
 
@@ -198,7 +199,19 @@ public class Controller {
         System.out.println("query comment: " + comment);
         try {
             if (PreDefinedSlugSet.preDefinedSlugSet.contains(citySlug)) {
-                commentRepository.save(Comment.builder().slug(citySlug).comment(receivedComment.getString("comment")).build());
+                commentRepository.save(Comment.builder()
+                        .slug(citySlug)
+                        .comment(receivedComment
+                        .getString("comment"))
+                        .upvote(10)
+                        .downvote(0)
+                        .appuser(AppUser.builder()
+                                .username("user1")
+                                .password("x")
+                                .email("x")
+                                .build())
+                        .reply("I am infernal")
+                        .build());
             }
         } catch (DataIntegrityViolationException e) {
             System.out.println("Error: " + e);
@@ -269,4 +282,31 @@ public class Controller {
 
         return returnAppUser;
     }
+
+    @PutMapping("/rate/{commentID}")
+    @CrossOrigin(origins = {"http://localhost:3000", "http://localhost:3001"})
+    public void rateComment(@PathVariable Long commentID, @RequestBody String rate) throws JSONException {
+        JSONObject rating = new JSONObject(rate);
+        Comment comment = commentRepository.getOne(commentID);
+        if (rating.getString("rate").equals("upvote")) {
+            comment.setUpvote(comment.getUpvote() + 1);
+        }
+        else {
+            comment.setDownvote(comment.getDownvote() + 1);
+        }
+        commentRepository.save(comment);
+    }
+    @PostMapping("/reply/{commentID}")
+    @CrossOrigin(origins = {"http://localhost:3000", "http://localhost:3001"})
+    public void replyComment(@PathVariable Long commentID, @RequestBody String reply) throws JSONException {
+        JSONObject replies = new JSONObject(reply);
+        Comment comment = commentRepository.getOne(commentID);
+        List<String> previousReplies = comment.getReplies();
+        previousReplies.add(replies.getString("reply"));
+        comment.setReplies(previousReplies);
+
+        commentRepository.saveAndFlush(comment);
+
+    }
+
 }

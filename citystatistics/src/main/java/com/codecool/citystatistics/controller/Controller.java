@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 
 @RestController
@@ -83,7 +82,6 @@ public class Controller {
         String URL = "https://api.teleport.org/api/urban_areas/slug:" + citySlug;
         ArrayList<Score> scoreArrayList = new ArrayList<>();
         ArrayList<Salary> salaryArrayList = new ArrayList<>();
-        //ArrayList<Comment> comments = commentRepository.getAllCommentsBySlug(citySlug);
         ArrayList<Comment> comments = commentRepository.getCommentsBySlug(citySlug);
         ArrayList<String> cityImages = imageRepository.getAllBase64BySlug(citySlug);
 
@@ -241,7 +239,6 @@ public class Controller {
     public void rateComment(@PathVariable Long commentID, @RequestBody String rate) throws JSONException {
         JSONObject rating = new JSONObject(rate);
         Comment comment = commentRepository.getOne(commentID);
-        System.out.println(rating);
         if (rating.getString("rate").equals("upvote")) {
             comment.setUpvote(comment.getUpvote() + 1);
         }
@@ -255,7 +252,6 @@ public class Controller {
     public void replyComment(@PathVariable Long commentID, @RequestBody String reply) throws JSONException {
         JSONObject replies = new JSONObject(reply);
         Comment comment = commentRepository.getOne(commentID);
-        System.out.println(replies);
         List<String> previousReplies = comment.getReplies();
         previousReplies.add(replies.getString("reply"));
         comment.setReplies(previousReplies);

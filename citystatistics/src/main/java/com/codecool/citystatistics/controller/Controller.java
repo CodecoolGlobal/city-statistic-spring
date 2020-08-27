@@ -186,6 +186,7 @@ public class Controller {
                                 .password("x")
                                 .email("x")
                                 .build())
+                        .reply("I am infernal")
                         .build());
             }
         } catch (DataIntegrityViolationException e) {
@@ -239,6 +240,20 @@ public class Controller {
     @CrossOrigin(origins = {"http://localhost:3000", "http://localhost:3001"})
     public void rateComment(@PathVariable Long commentID, @RequestBody String rate) throws JSONException {
         JSONObject rating = new JSONObject(rate);
+        Comment xd = commentRepository.getOne(commentID);
+        System.out.println(rating);
+        if (rating.getString("rate").equals("upvote")) {
+            xd.setUpvote(xd.getUpvote() + 1);
+        }
+        else {
+            xd.setDownvote(xd.getDownvote() + 1);
+        }
+        commentRepository.save(xd);
+    }
+    @PostMapping("/reply/{commentID}")
+    @CrossOrigin(origins = {"http://localhost:3000", "http://localhost:3001"})
+    public void replyComment(@PathVariable Long commentID, @RequestBody String reply) throws JSONException {
+        JSONObject rating = new JSONObject(reply);
         Comment xd = commentRepository.getOne(commentID);
         System.out.println(rating);
         if (rating.getString("rate").equals("upvote")) {

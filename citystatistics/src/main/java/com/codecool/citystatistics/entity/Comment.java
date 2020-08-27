@@ -1,12 +1,10 @@
 package com.codecool.citystatistics.entity;
 
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -34,4 +32,8 @@ public class Comment {
 
     @ManyToOne(cascade = CascadeType.PERSIST)
     private AppUser appuser;
+
+    @ElementCollection
+    @Singular
+    private List<String> replies;
 }

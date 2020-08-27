@@ -1,5 +1,6 @@
 package com.codecool.citystatistics.model;
 
+import com.codecool.citystatistics.entity.Comment;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,7 +18,7 @@ public class CityAllData {
     public String image;
     public ArrayList<Score> scores;
     public ArrayList<Salary> salaries;
-    public ArrayList<String> comments;
+    public ArrayList<Comment> comments;
     public ArrayList<String> images;
 
 }

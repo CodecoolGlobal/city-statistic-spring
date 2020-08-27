@@ -79,10 +79,12 @@ public class Controller {
     @GetMapping("/cityalldata/{citySlug}")
     @CrossOrigin(origins = {"http://localhost:3000", "http://localhost:3001"})
     public CityAllData result(@PathVariable String citySlug) throws IOException, JSONException {
+        System.out.println(citySlug);
         String URL = "https://api.teleport.org/api/urban_areas/slug:" + citySlug;
         ArrayList<Score> scoreArrayList = new ArrayList<>();
         ArrayList<Salary> salaryArrayList = new ArrayList<>();
-        ArrayList<String> comments = commentRepository.getAllCommentsBySlug(citySlug);
+        //ArrayList<Comment> comments = commentRepository.getAllCommentsBySlug(citySlug);
+        ArrayList<Comment> comments = commentRepository.getCommentsBySlug(citySlug);
         ArrayList<String> cityImages = imageRepository.getAllBase64BySlug(citySlug);
 
 

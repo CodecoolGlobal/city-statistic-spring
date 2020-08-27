@@ -26,11 +26,11 @@ public class Comment {
 
     @Column
     @Builder.Default
-    private Integer upVote = 0;
+    private Integer upvote = 0;
 
     @Column
     @Builder.Default
-    private Integer downVote = 0;
+    private Integer downvote = 0;
 
     @ManyToOne(cascade = CascadeType.PERSIST)
     private AppUser appuser;

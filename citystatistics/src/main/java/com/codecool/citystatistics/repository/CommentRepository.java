@@ -9,6 +9,6 @@ import java.util.ArrayList;
 
 public interface CommentRepository extends JpaRepository<Comment, Long> {
 
-    @Query("SELECT comment FROM Comment WHERE slug=:citySlug")
+    @Query("SELECT comment, upvote, downvote, appuser.username, id FROM Comment WHERE slug=:citySlug")
     ArrayList<String> getAllCommentsBySlug(@Param("citySlug") String citySlug);
 }

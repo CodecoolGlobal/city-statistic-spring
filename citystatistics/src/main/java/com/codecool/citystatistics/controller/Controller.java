@@ -1,5 +1,6 @@
 package com.codecool.citystatistics.controller;
 
+import com.codecool.citystatistics.entity.AppUser;
 import com.codecool.citystatistics.entity.Comment;
 import com.codecool.citystatistics.entity.FavouriteCity;
 import com.codecool.citystatistics.entity.Image;
@@ -13,11 +14,13 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 
 @RestController
@@ -174,8 +177,13 @@ public class Controller {
                         .slug(citySlug)
                         .comment(receivedComment
                         .getString("comment"))
-                        .upVote(0)
-                        .downVote(0)
+                        .upvote(10)
+                        .downvote(0)
+                        .appuser(AppUser.builder()
+                                .username("user1")
+                                .password("x")
+                                .email("x")
+                                .build())
                         .build());
             }
         } catch (DataIntegrityViolationException e) {
@@ -224,4 +232,20 @@ public class Controller {
             System.out.println("Error: " + e);
         }
      }
+
+    @PutMapping("/rate/{commentID}")
+    @CrossOrigin(origins = {"http://localhost:3000", "http://localhost:3001"})
+    public void rateComment(@PathVariable Long commentID, @RequestBody String rate) throws JSONException {
+        JSONObject rating = new JSONObject(rate);
+        Comment xd = commentRepository.getOne(commentID);
+        System.out.println(rating);
+        if (rating.getString("rate").equals("upvote")) {
+            xd.setUpvote(xd.getUpvote() + 1);
+        }
+        else {
+            xd.setDownvote(xd.getDownvote() + 1);
+        }
+        commentRepository.save(xd);
+    }
+
 }

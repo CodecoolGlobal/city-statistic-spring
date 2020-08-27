@@ -21,6 +21,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -157,7 +158,7 @@ public class Controller {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         AppUser appUser = appUserRepository.getAppUserByUsername((String) authentication.getPrincipal());
-
+        System.out.println(appUser);
 
         try {
             if (PreDefinedSlugSet.preDefinedSlugSet.contains(citySlug)) {
@@ -240,9 +241,13 @@ public class Controller {
     @CrossOrigin(origins = {"http://localhost:3000", "http://localhost:3001"})
     public void saveImage(@PathVariable String citySlug, @RequestBody String base64) throws IOException, JSONException {
         JSONObject imageBase64 = new JSONObject(base64);
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        AppUser appUser = appUserRepository.getAppUserByUsername((String) authentication.getPrincipal());
+
         try {
             if (PreDefinedSlugSet.preDefinedSlugSet.contains(citySlug)) {
-                imageRepository.save(Image.builder().slug(citySlug).base64(imageBase64.getString("base64")).build());
+                imageRepository.save(Image.builder().slug(citySlug).user(appUser).base64(imageBase64.getString("base64")).build());
             }
         } catch (DataIntegrityViolationException e) {
             System.out.println("Error: " + e);

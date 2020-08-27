@@ -41,7 +41,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/get-all-favourite-cities").authenticated()
                 .antMatchers("/add-favourite-city/**").authenticated()
                 .antMatchers("/delete-favourite-city/**").authenticated()
+                .antMatchers("/saveimage/**").authenticated()
                 .antMatchers("/continent/**").permitAll()
+                .antMatchers("/cityalldata/**").permitAll()
                 .anyRequest().denyAll()
                 .and()
                 .addFilterBefore(new JwtTokenFilter(jwtTokenServices), UsernamePasswordAuthenticationFilter.class);

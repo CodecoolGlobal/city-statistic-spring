@@ -51,12 +51,15 @@ public class Controller {
     @GetMapping("/continent/{continent}")
     @CrossOrigin(origins = {"http://localhost:3000", "http://localhost:3001"})
     public ArrayList<CitySmallCard> continentCities(@PathVariable String continent) throws IOException, JSONException {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        AppUser appUser = appUserRepository.getAppUserByUsername((String) authentication.getPrincipal());
+
         ArrayList<CitySmallCard> citySmallCards = new ArrayList<>();
         String searchContinentURL = "https://api.teleport.org/api/continents/geonames%3A" + continent + "/urban_areas/";
         JSONObject resultSlugs = apiCall.getResult(searchContinentURL);
         JSONArray slugs = resultSlugs.getJSONObject("_links").getJSONArray("ua:items");
 
-        List<String> favouriteCitySlugs = favouriteCityRepository.getAllFavouriteSlug();
+        List<String> favouriteCitySlugs = favouriteCityRepository.getFavouriteCityByUser(appUser);
 
         for (int i = 0; i < slugs.length(); i++) {
 
@@ -204,8 +207,11 @@ public class Controller {
     @GetMapping("/get-all-favourite-cities")
     @CrossOrigin(origins = {"http://localhost:3000", "http://localhost:3001"})
     public ArrayList<CitySmallCard> getAllFavouriteCitySlugs() throws IOException, JSONException {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        AppUser appUser = appUserRepository.getAppUserByUsername((String) authentication.getPrincipal());
 
-        ArrayList<String> allFavouriteSlug = favouriteCityRepository.getAllFavouriteSlug();
+
+        ArrayList<String> allFavouriteSlug = favouriteCityRepository.getFavouriteCityByUser(appUser);
         ArrayList<CitySmallCard> citySmallCards = new ArrayList<>();
         for (String favouriteSlug : allFavouriteSlug){
             String URL = "https://api.teleport.org/api/urban_areas/slug:"+favouriteSlug;

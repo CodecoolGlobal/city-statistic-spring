@@ -13,7 +13,7 @@ public interface FavouriteCityRepository extends JpaRepository<FavouriteCity, Lo
     @Transactional
     void deleteFavouriteCityBySlugAndUser(String citySlug, AppUser appUser);
 
-    @Query("SELECT slug FROM FavouriteCity")
-    ArrayList<String> getAllFavouriteSlug();
+    @Query("SELECT slug FROM FavouriteCity WHERE user = :user")
+    ArrayList<String> getFavouriteCityByUser(@Param ("user") AppUser user);
 
 }

@@ -170,7 +170,13 @@ public class Controller {
         System.out.println("query comment: " + comment);
         try {
             if (PreDefinedSlugSet.preDefinedSlugSet.contains(citySlug)) {
-                commentRepository.save(Comment.builder().slug(citySlug).comment(receivedComment.getString("comment")).build());
+                commentRepository.save(Comment.builder()
+                        .slug(citySlug)
+                        .comment(receivedComment
+                        .getString("comment"))
+                        .upVote(0)
+                        .downVote(0)
+                        .build());
             }
         } catch (DataIntegrityViolationException e) {
             System.out.println("Error: " + e);

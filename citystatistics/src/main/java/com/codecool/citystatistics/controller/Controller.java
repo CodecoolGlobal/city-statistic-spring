@@ -253,4 +253,20 @@ public class Controller {
             System.out.println("Error: " + e);
         }
      }
+
+
+    @GetMapping("/profile")
+    @CrossOrigin(origins = {"http://localhost:3000", "http://localhost:3001"})
+    public AppUser getMyProfile() throws IOException, JSONException {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        AppUser appUser = appUserRepository.getAppUserByUsername((String) authentication.getPrincipal());
+
+        AppUser returnAppUser = AppUser.builder()
+                                    .email(appUser.getEmail())
+                                    .username(appUser.getUsername())
+                                    .profileImage(appUser.getProfileImage())
+                                    .build();
+
+        return returnAppUser;
+    }
 }

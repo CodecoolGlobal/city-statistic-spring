@@ -45,6 +45,9 @@ public class AppUser {
     @OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     private List<Image> images;
 
+    @Column(columnDefinition = "LONGVARCHAR")
+    private String profileImage;
+
 
     public Long calculateAge(){
         if(birthDate != null){

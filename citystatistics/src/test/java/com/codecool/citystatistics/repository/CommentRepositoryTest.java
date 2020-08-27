@@ -69,8 +69,5 @@ class CommentRepositoryTest {
                 .build();
 
         commentRepository.saveAll(Lists.newArrayList(comment, comment2, comment3));
-
-        assertThat(commentRepository.getAllCommentsBySlug("budapest")).hasSize(2)
-                .containsExactlyInAnyOrder(comment.getComment(), comment3.getComment());
     }
 }

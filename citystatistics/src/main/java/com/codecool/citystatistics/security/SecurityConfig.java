@@ -42,6 +42,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/add-favourite-city/**").authenticated()
                 .antMatchers("/delete-favourite-city/**").authenticated()
                 .antMatchers("/saveimage/**").authenticated()
+                .antMatchers("/add-comment/**").authenticated()
                 .antMatchers("/continent/**").permitAll()
                 .antMatchers("/cityalldata/**").permitAll()
                 .anyRequest().denyAll()

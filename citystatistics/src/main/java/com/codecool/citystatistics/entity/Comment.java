@@ -23,12 +23,10 @@ public class Comment {
     private String slug;
 
     @Column
-    @Builder.Default
-    private Integer upvote = 0;
+    private Integer upvote;
 
     @Column
-    @Builder.Default
-    private Integer downvote = 0;
+    private Integer downvote;
 
     @ManyToOne(cascade = CascadeType.PERSIST)
     private AppUser appuser;

@@ -199,7 +199,7 @@ public class Controller {
         System.out.println("query comment: " + comment);
         try {
             if (PreDefinedSlugSet.preDefinedSlugSet.contains(citySlug)) {
-                commentRepository.save(Comment.builder()
+                commentRepository.saveAndFlush(Comment.builder()
                         .slug(citySlug)
                         .comment(receivedComment
                         .getString("comment"))
@@ -210,7 +210,7 @@ public class Controller {
                                 .password("x")
                                 .email("x")
                                 .build())
-                        .reply("I am infernal")
+                        .reply("placeholder")
                         .build());
             }
         } catch (DataIntegrityViolationException e) {

@@ -10,6 +10,7 @@ import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Data
 @NoArgsConstructor
@@ -37,6 +38,9 @@ public class AppUser {
     private LocalDate birthDate;
 
     private Long age = calculateAge();
+
+    @OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    private List<FavouriteCity> favouriteCities;
 
 
     public Long calculateAge(){

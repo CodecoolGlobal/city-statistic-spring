@@ -38,6 +38,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/auth/registration").permitAll()
                 .antMatchers("/auth/signin").permitAll()
                 .antMatchers("/auth/me").authenticated()
+                .antMatchers("/add-favourite-city/**").authenticated()
+                .antMatchers("/delete-favourite-city/**").authenticated()
                 .antMatchers("/continent/**").permitAll()
                 .anyRequest().denyAll()
                 .and()

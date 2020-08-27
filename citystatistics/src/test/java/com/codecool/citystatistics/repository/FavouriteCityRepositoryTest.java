@@ -90,7 +90,7 @@ class FavouriteCityRepositoryTest {
                 .build();
 
         favouriteCityRepository.saveAll(Lists.newArrayList(favouriteCity1, favouriteCity2));
-        favouriteCityRepository.deleteFavouriteCityBySlug("budapest");
+        //favouriteCityRepository.deleteFavouriteCityBySlugAndUser("budapest");
         assertThat(favouriteCityRepository.getAllFavouriteSlug()).hasSize(1).contains("london");
 
     }

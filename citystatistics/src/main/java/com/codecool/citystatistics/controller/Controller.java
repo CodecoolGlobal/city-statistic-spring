@@ -1,10 +1,12 @@
 package com.codecool.citystatistics.controller;
 
+import com.codecool.citystatistics.entity.AppUser;
 import com.codecool.citystatistics.entity.Comment;
 import com.codecool.citystatistics.entity.FavouriteCity;
 import com.codecool.citystatistics.entity.Image;
 import com.codecool.citystatistics.init.PreDefinedSlugSet;
 import com.codecool.citystatistics.model.*;
+import com.codecool.citystatistics.repository.AppUserRepository;
 import com.codecool.citystatistics.repository.CommentRepository;
 import com.codecool.citystatistics.repository.FavouriteCityRepository;
 import com.codecool.citystatistics.repository.ImageRepository;
@@ -13,15 +15,22 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 
 @RestController
 public class Controller {
+
+    @Autowired
+    AuthenticationManager authenticationManager;
 
     @Autowired
     ApiCall apiCall;
@@ -34,6 +43,9 @@ public class Controller {
 
     @Autowired
     ImageRepository imageRepository;
+
+    @Autowired
+    AppUserRepository appUserRepository;
 
 
     @GetMapping("/continent/{continent}")
@@ -140,9 +152,16 @@ public class Controller {
     @CrossOrigin(origins = {"http://localhost:3000", "http://localhost:3001"})
     public void addFavouriteCity(@PathVariable String citySlug) {
 
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        AppUser appUser = appUserRepository.getAppUserByUsername((String) authentication.getPrincipal());
+
+
         try {
             if (PreDefinedSlugSet.preDefinedSlugSet.contains(citySlug)) {
-                favouriteCityRepository.save(FavouriteCity.builder().slug(citySlug).build());
+                favouriteCityRepository.save(FavouriteCity.builder()
+                        .slug(citySlug)
+                        .user(appUser)
+                        .build());
             }
         } catch (DataIntegrityViolationException e) {
             System.out.println("Error: " + e);
@@ -153,9 +172,14 @@ public class Controller {
     @CrossOrigin(origins = {"http://localhost:3000", "http://localhost:3001"})
     public void deleteFavouriteCity(@PathVariable String citySlug) {
 
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        AppUser appUser = appUserRepository.getAppUserByUsername((String) authentication.getPrincipal());
+
+
+
         try {
             if (PreDefinedSlugSet.preDefinedSlugSet.contains(citySlug)) {
-                favouriteCityRepository.deleteFavouriteCityBySlug(citySlug);
+                favouriteCityRepository.deleteFavouriteCityBySlugAndUser(citySlug, appUser);
             }
         } catch (DataIntegrityViolationException e) {
             System.out.println("Error: " + e);

@@ -195,6 +195,9 @@ public class Controller {
     @CrossOrigin(origins = {"http://localhost:3000", "http://localhost:3001"})
     public void addComment(@PathVariable String citySlug, @RequestBody String comment) throws JSONException {
         JSONObject receivedComment = new JSONObject(comment);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        AppUser appUser = appUserRepository.getAppUserByUsername((String) authentication.getPrincipal());
+
         System.out.println(receivedComment.getString("comment"));
         System.out.println("query comment: " + comment);
         try {
@@ -205,12 +208,7 @@ public class Controller {
                         .getString("comment"))
                         .upvote(10)
                         .downvote(0)
-                        .appuser(AppUser.builder()
-                                .username("user1")
-                                .password("x")
-                                .email("x")
-                                .build())
-                        .reply("placeholder")
+                        .appuser(appUser)
                         .build());
             }
         } catch (DataIntegrityViolationException e) {

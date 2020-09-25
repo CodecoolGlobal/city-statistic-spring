@@ -6,10 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Data
 @NoArgsConstructor
@@ -27,5 +24,8 @@ public class Image {
 
     @Column(nullable = false, columnDefinition = "LONGVARCHAR")
     private String base64;
+
+    @ManyToOne
+    private AppUser user;
 
 }

@@ -1,15 +1,10 @@
 package com.codecool.citystatistics.entity;
 
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -26,4 +21,17 @@ public class Comment {
 
     @Column(nullable = false)
     private String slug;
+
+    @Column
+    private Integer upvote;
+
+    @Column
+    private Integer downvote;
+
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    private AppUser appuser;
+
+    @ElementCollection
+    @Singular
+    private List<String> replies;
 }
